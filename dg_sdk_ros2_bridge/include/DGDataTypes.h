@@ -61,7 +61,7 @@
 #define MAX_GRIPPER_GPIO_SIZE 4
 
 /// @brief Number of data types you can receive
-#define MAX_RECEIVED_DATA_TYPE_COUNT 7 
+#define MAX_RECEIVED_DATA_TYPE_COUNT 8
 
 /// @ brief Definition of PI and conversion between Radian and Degree
 #define PI 3.1415927f
@@ -244,6 +244,7 @@ typedef enum DEVELOPER_MODE_RECEIVED_DATA_TYPE
 	DEVELOPER_MODE_RECEIVED_DATA_TYPE_FINGER_FT_SENSOR,
 	DEVELOPER_MODE_RECEIVED_DATA_TYPE_GPIO,
 	DEVELOPER_MODE_RECEIVED_DATA_TYPE_MODULE_ERROR_CODE,
+	DEVELOPER_MODE_RECEIVED_DATA_TYPE_CONTROL_PERIOD,
 }RECEIVED_DATA_TYPE;
 
 /// @brief Enumerated constants for setting gripper grasp mode
@@ -338,6 +339,8 @@ typedef enum DG_SENSOR_TYPE
 ///blendMoveStatus		4					Status information when using the Blend Joint feature
 ///productID				4					Gripper ID
 ///firmwareVerision		4					Gripper firmware version
+///moduleErrorCode		4					Module communication error
+///controlPeriod			4					Gripper internal control period
 typedef struct ReceivedGripperData
 {
 	float joint[MAX_JOINT_COUNT];
@@ -352,6 +355,7 @@ typedef struct ReceivedGripperData
 	int productID;
 	int firmwareVersion;
 	int moduleErrorCode;
+	int controlPeriod;
 }ReceivedGripperData;
 
 /// @brief Recipe Setup Structures for Using Blend Motion
