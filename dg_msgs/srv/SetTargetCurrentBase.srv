@@ -1,0 +1,8 @@
+# SetTargetCurrentBase service
+# Set the target current value for the base joints (DG-4F)
+
+# Request
+int32[2] target_current  # Enter target current values (mA) for base joints
+---
+# Response
+int32 result  # DG_RESULT enum value

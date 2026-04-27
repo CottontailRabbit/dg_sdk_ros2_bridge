@@ -1,0 +1,11 @@
+# SetJointGainPIDBase service
+# Set the maximum values for the P, I, and D gains and error integrals for the base joints (DG-4F)
+
+# Request
+float32[2] gain_p  # Enter P Gain for base joints
+float32[2] gain_d  # Enter the D gain for base joints
+float32[2] gain_i  # Enter the I gain for base joints
+float32[2] i_limit  # Setting the Error Integral Maximum for base joints
+---
+# Response
+int32 result  # DG_RESULT enum value

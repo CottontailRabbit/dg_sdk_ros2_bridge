@@ -289,6 +289,12 @@ class DGSDKRos2Bridge : public rclcpp::Node {
         std::bind(&DGSDKRos2Bridge::moveJointAllCallback, this,
                   std::placeholders::_1, std::placeholders::_2));
 
+    move_joint_base_service_ =
+        this->create_service<dg_msgs::srv::MoveJointBase>(
+            "/dg/move_joint_base",
+            std::bind(&DGSDKRos2Bridge::moveJointBaseCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
     // Getter Services
     get_received_gripper_data_service_ =
         this->create_service<dg_msgs::srv::GetReceivedGripperData>(
@@ -315,6 +321,12 @@ class DGSDKRos2Bridge : public rclcpp::Node {
             std::bind(&DGSDKRos2Bridge::setJointGainPAllCallback, this,
                       std::placeholders::_1, std::placeholders::_2));
 
+    set_joint_gain_p_base_service_ =
+        this->create_service<dg_msgs::srv::SetJointGainPBase>(
+            "/dg/set_joint_gain_p_base",
+            std::bind(&DGSDKRos2Bridge::setJointGainPBaseCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
     set_joint_gain_d_service_ =
         this->create_service<dg_msgs::srv::SetJointGainD>(
             "/dg/set_joint_gain_d",
@@ -333,6 +345,12 @@ class DGSDKRos2Bridge : public rclcpp::Node {
             std::bind(&DGSDKRos2Bridge::setJointGainDAllCallback, this,
                       std::placeholders::_1, std::placeholders::_2));
 
+    set_joint_gain_d_base_service_ =
+        this->create_service<dg_msgs::srv::SetJointGainDBase>(
+            "/dg/set_joint_gain_d_base",
+            std::bind(&DGSDKRos2Bridge::setJointGainDBaseCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
     set_joint_gain_i_service_ =
         this->create_service<dg_msgs::srv::SetJointGainI>(
             "/dg/set_joint_gain_i",
@@ -349,6 +367,12 @@ class DGSDKRos2Bridge : public rclcpp::Node {
         this->create_service<dg_msgs::srv::SetJointGainIAll>(
             "/dg/set_joint_gain_i_all",
             std::bind(&DGSDKRos2Bridge::setJointGainIAllCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
+    set_joint_gain_i_base_service_ =
+        this->create_service<dg_msgs::srv::SetJointGainIBase>(
+            "/dg/set_joint_gain_i_base",
+            std::bind(&DGSDKRos2Bridge::setJointGainIBaseCallback, this,
                       std::placeholders::_1, std::placeholders::_2));
 
     set_control_pid_mode_service_ =
@@ -381,6 +405,12 @@ class DGSDKRos2Bridge : public rclcpp::Node {
             std::bind(&DGSDKRos2Bridge::setJointGainPIDAllEqualCallback, this,
                       std::placeholders::_1, std::placeholders::_2));
 
+    set_joint_gain_pid_base_service_ =
+        this->create_service<dg_msgs::srv::SetJointGainPIDBase>(
+            "/dg/set_joint_gain_pid_base",
+            std::bind(&DGSDKRos2Bridge::setJointGainPIDBaseCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
     // Motion Time Functions
     set_motion_time_joint_service_ =
         this->create_service<dg_msgs::srv::SetMotionTimeJoint>(
@@ -406,6 +436,12 @@ class DGSDKRos2Bridge : public rclcpp::Node {
             std::bind(&DGSDKRos2Bridge::setMotionTimeAllEqualCallback, this,
                       std::placeholders::_1, std::placeholders::_2));
 
+    set_motion_time_base_service_ =
+        this->create_service<dg_msgs::srv::SetMotionTimeBase>(
+            "/dg/set_motion_time_base",
+            std::bind(&DGSDKRos2Bridge::setMotionTimeBaseCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
     // Position Mode Functions
     set_position_mode_joint_service_ =
         this->create_service<dg_msgs::srv::SetPositionModeJoint>(
@@ -423,6 +459,12 @@ class DGSDKRos2Bridge : public rclcpp::Node {
         this->create_service<dg_msgs::srv::SetPositionModeAll>(
             "/dg/set_position_mode_all",
             std::bind(&DGSDKRos2Bridge::setPositionModeAllCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
+    set_position_mode_base_service_ =
+        this->create_service<dg_msgs::srv::SetPositionModeBase>(
+            "/dg/set_position_mode_base",
+            std::bind(&DGSDKRos2Bridge::setPositionModeBaseCallback, this,
                       std::placeholders::_1, std::placeholders::_2));
 
     set_current_control_mode_service_ =
@@ -447,6 +489,18 @@ class DGSDKRos2Bridge : public rclcpp::Node {
         this->create_service<dg_msgs::srv::SetTargetCurrentAll>(
             "/dg/set_target_current_all",
             std::bind(&DGSDKRos2Bridge::setTargetCurrentAllCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
+    set_target_current_base_service_ =
+        this->create_service<dg_msgs::srv::SetTargetCurrentBase>(
+            "/dg/set_target_current_base",
+            std::bind(&DGSDKRos2Bridge::setTargetCurrentBaseCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
+    set_joint_encoder_zero_service_ =
+        this->create_service<dg_msgs::srv::SetJointEncoderZero>(
+            "/dg/set_joint_encoder_zero",
+            std::bind(&DGSDKRos2Bridge::setJointEncoderZeroCallback, this,
                       std::placeholders::_1, std::placeholders::_2));
 
     // Recipe Functions - TODO: Implement these callbacks
@@ -776,6 +830,19 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
     response->result = static_cast<int>(result);
   }
 
+  void moveJointBaseCallback(
+      const std::shared_ptr<dg_msgs::srv::MoveJointBase::Request> request,
+      std::shared_ptr<dg_msgs::srv::MoveJointBase::Response> response) {
+    float targetJoints[MAX_BASE_JOINT_COUNT];
+    for (int i = 0; i < MAX_BASE_JOINT_COUNT; i++) {
+      targetJoints[i] = i < static_cast<int>(request->target_joint.size())
+                            ? request->target_joint[i]
+                            : 0.0f;
+    }
+    DG_RESULT result = MoveJointBase(targetJoints);
+    response->result = static_cast<int>(result);
+  }
+
   void getReceivedGripperDataCallback(
       const std::shared_ptr<
           dg_msgs::srv::GetReceivedGripperData::Request> /* request */,
@@ -844,6 +911,19 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
     response->result = static_cast<int>(result);
   }
 
+  void setJointGainPBaseCallback(
+      const std::shared_ptr<dg_msgs::srv::SetJointGainPBase::Request> request,
+      std::shared_ptr<dg_msgs::srv::SetJointGainPBase::Response> response) {
+    float gainP[MAX_BASE_JOINT_COUNT];
+    for (int i = 0; i < MAX_BASE_JOINT_COUNT; i++) {
+      gainP[i] = i < static_cast<int>(request->gain_p.size())
+                     ? request->gain_p[i]
+                     : 0.0f;
+    }
+    DG_RESULT result = SetJointGainPBase(gainP);
+    response->result = static_cast<int>(result);
+  }
+
   // Joint Gain D Functions
   void setJointGainDCallback(
       const std::shared_ptr<dg_msgs::srv::SetJointGainD::Request> request,
@@ -879,6 +959,19 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
       }
     }
     DG_RESULT result = SetJointGainDAll(gainD);
+    response->result = static_cast<int>(result);
+  }
+
+  void setJointGainDBaseCallback(
+      const std::shared_ptr<dg_msgs::srv::SetJointGainDBase::Request> request,
+      std::shared_ptr<dg_msgs::srv::SetJointGainDBase::Response> response) {
+    float gainD[MAX_BASE_JOINT_COUNT];
+    for (int i = 0; i < MAX_BASE_JOINT_COUNT; i++) {
+      gainD[i] = i < static_cast<int>(request->gain_d.size())
+                     ? request->gain_d[i]
+                     : 0.0f;
+    }
+    DG_RESULT result = SetJointGainDBase(gainD);
     response->result = static_cast<int>(result);
   }
 
@@ -931,6 +1024,23 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
       }
     }
     DG_RESULT result = SetJointGainIAll(gainI, iLimit);
+    response->result = static_cast<int>(result);
+  }
+
+  void setJointGainIBaseCallback(
+      const std::shared_ptr<dg_msgs::srv::SetJointGainIBase::Request> request,
+      std::shared_ptr<dg_msgs::srv::SetJointGainIBase::Response> response) {
+    float gainI[MAX_BASE_JOINT_COUNT];
+    float iLimit[MAX_BASE_JOINT_COUNT];
+    for (int i = 0; i < MAX_BASE_JOINT_COUNT; i++) {
+      gainI[i] = i < static_cast<int>(request->gain_i.size())
+                     ? request->gain_i[i]
+                     : 0.0f;
+      iLimit[i] = i < static_cast<int>(request->i_limit.size())
+                      ? request->i_limit[i]
+                      : 0.0f;
+    }
+    DG_RESULT result = SetJointGainIBase(gainI, iLimit);
     response->result = static_cast<int>(result);
   }
 
@@ -1016,6 +1126,31 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
     response->result = static_cast<int>(result);
   }
 
+  void setJointGainPIDBaseCallback(
+      const std::shared_ptr<dg_msgs::srv::SetJointGainPIDBase::Request> request,
+      std::shared_ptr<dg_msgs::srv::SetJointGainPIDBase::Response> response) {
+    float gainP[MAX_BASE_JOINT_COUNT];
+    float gainD[MAX_BASE_JOINT_COUNT];
+    float gainI[MAX_BASE_JOINT_COUNT];
+    float iLimit[MAX_BASE_JOINT_COUNT];
+    for (int i = 0; i < MAX_BASE_JOINT_COUNT; i++) {
+      gainP[i] = i < static_cast<int>(request->gain_p.size())
+                     ? request->gain_p[i]
+                     : 0.0f;
+      gainD[i] = i < static_cast<int>(request->gain_d.size())
+                     ? request->gain_d[i]
+                     : 0.0f;
+      gainI[i] = i < static_cast<int>(request->gain_i.size())
+                     ? request->gain_i[i]
+                     : 0.0f;
+      iLimit[i] = i < static_cast<int>(request->i_limit.size())
+                      ? request->i_limit[i]
+                      : 0.0f;
+    }
+    DG_RESULT result = SetJointGainPIDBase(gainP, gainD, gainI, iLimit);
+    response->result = static_cast<int>(result);
+  }
+
   // Motion Time Functions
   void setMotionTimeJointCallback(
       const std::shared_ptr<dg_msgs::srv::SetMotionTimeJoint::Request> request,
@@ -1063,6 +1198,19 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
     response->result = static_cast<int>(result);
   }
 
+  void setMotionTimeBaseCallback(
+      const std::shared_ptr<dg_msgs::srv::SetMotionTimeBase::Request> request,
+      std::shared_ptr<dg_msgs::srv::SetMotionTimeBase::Response> response) {
+    int motionTime[MAX_BASE_JOINT_COUNT];
+    for (int i = 0; i < MAX_BASE_JOINT_COUNT; i++) {
+      motionTime[i] = i < static_cast<int>(request->motion_time.size())
+                          ? request->motion_time[i]
+                          : 0;
+    }
+    DG_RESULT result = SetMotionTimeBase(motionTime);
+    response->result = static_cast<int>(result);
+  }
+
   // Position Mode Functions
   void setPositionModeJointCallback(
       const std::shared_ptr<dg_msgs::srv::SetPositionModeJoint::Request>
@@ -1102,6 +1250,19 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
       }
     }
     DG_RESULT result = SetPositionModeAll(positionMode);
+    response->result = static_cast<int>(result);
+  }
+
+  void setPositionModeBaseCallback(
+      const std::shared_ptr<dg_msgs::srv::SetPositionModeBase::Request> request,
+      std::shared_ptr<dg_msgs::srv::SetPositionModeBase::Response> response) {
+    int positionMode[MAX_BASE_JOINT_COUNT];
+    for (int i = 0; i < MAX_BASE_JOINT_COUNT; i++) {
+      positionMode[i] = i < static_cast<int>(request->position_mode.size())
+                            ? request->position_mode[i]
+                            : 0;
+    }
+    DG_RESULT result = SetPositionModeBase(positionMode);
     response->result = static_cast<int>(result);
   }
 
@@ -1153,6 +1314,27 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
       }
     }
     DG_RESULT result = SetTargetCurrentAll(targetCurrent);
+    response->result = static_cast<int>(result);
+  }
+
+  void setTargetCurrentBaseCallback(
+      const std::shared_ptr<dg_msgs::srv::SetTargetCurrentBase::Request>
+          request,
+      std::shared_ptr<dg_msgs::srv::SetTargetCurrentBase::Response> response) {
+    int targetCurrent[MAX_BASE_JOINT_COUNT];
+    for (int i = 0; i < MAX_BASE_JOINT_COUNT; i++) {
+      targetCurrent[i] = i < static_cast<int>(request->target_current.size())
+                             ? request->target_current[i]
+                             : 0;
+    }
+    DG_RESULT result = SetTargetCurrentBase(targetCurrent);
+    response->result = static_cast<int>(result);
+  }
+
+  void setJointEncoderZeroCallback(
+      const std::shared_ptr<dg_msgs::srv::SetJointEncoderZero::Request>,
+      std::shared_ptr<dg_msgs::srv::SetJointEncoderZero::Response> response) {
+    DG_RESULT result = SetJointEncoderZero();
     response->result = static_cast<int>(result);
   }
 
@@ -1294,6 +1476,8 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
   rclcpp::Service<dg_msgs::srv::MoveJoint>::SharedPtr move_joint_service_;
   rclcpp::Service<dg_msgs::srv::MoveJointAll>::SharedPtr
       move_joint_all_service_;
+  rclcpp::Service<dg_msgs::srv::MoveJointBase>::SharedPtr
+      move_joint_base_service_;
   rclcpp::Service<dg_msgs::srv::GetReceivedGripperData>::SharedPtr
       get_received_gripper_data_service_;
   rclcpp::Service<dg_msgs::srv::SetLowPassFilterAlpha>::SharedPtr
@@ -1320,18 +1504,24 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
       set_joint_gain_p_finger_service_;
   rclcpp::Service<dg_msgs::srv::SetJointGainPAll>::SharedPtr
       set_joint_gain_p_all_service_;
+  rclcpp::Service<dg_msgs::srv::SetJointGainPBase>::SharedPtr
+      set_joint_gain_p_base_service_;
   rclcpp::Service<dg_msgs::srv::SetJointGainD>::SharedPtr
       set_joint_gain_d_service_;
   rclcpp::Service<dg_msgs::srv::SetJointGainDFinger>::SharedPtr
       set_joint_gain_d_finger_service_;
   rclcpp::Service<dg_msgs::srv::SetJointGainDAll>::SharedPtr
       set_joint_gain_d_all_service_;
+  rclcpp::Service<dg_msgs::srv::SetJointGainDBase>::SharedPtr
+      set_joint_gain_d_base_service_;
   rclcpp::Service<dg_msgs::srv::SetJointGainI>::SharedPtr
       set_joint_gain_i_service_;
   rclcpp::Service<dg_msgs::srv::SetJointGainIFinger>::SharedPtr
       set_joint_gain_i_finger_service_;
   rclcpp::Service<dg_msgs::srv::SetJointGainIAll>::SharedPtr
       set_joint_gain_i_all_service_;
+  rclcpp::Service<dg_msgs::srv::SetJointGainIBase>::SharedPtr
+      set_joint_gain_i_base_service_;
   rclcpp::Service<dg_msgs::srv::SetControlPIDMode>::SharedPtr
       set_control_pid_mode_service_;
   rclcpp::Service<dg_msgs::srv::SetJointGainPID>::SharedPtr
@@ -1342,6 +1532,8 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
       set_joint_gain_pid_all_service_;
   rclcpp::Service<dg_msgs::srv::SetJointGainPIDAllEqual>::SharedPtr
       set_joint_gain_pid_all_equal_service_;
+  rclcpp::Service<dg_msgs::srv::SetJointGainPIDBase>::SharedPtr
+      set_joint_gain_pid_base_service_;
 
   // Motion Time Services
   rclcpp::Service<dg_msgs::srv::SetMotionTimeJoint>::SharedPtr
@@ -1352,6 +1544,8 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
       set_motion_time_all_service_;
   rclcpp::Service<dg_msgs::srv::SetMotionTimeAllEqual>::SharedPtr
       set_motion_time_all_equal_service_;
+  rclcpp::Service<dg_msgs::srv::SetMotionTimeBase>::SharedPtr
+      set_motion_time_base_service_;
 
   // Position Mode Services
   rclcpp::Service<dg_msgs::srv::SetPositionModeJoint>::SharedPtr
@@ -1360,6 +1554,8 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
       set_position_mode_finger_service_;
   rclcpp::Service<dg_msgs::srv::SetPositionModeAll>::SharedPtr
       set_position_mode_all_service_;
+  rclcpp::Service<dg_msgs::srv::SetPositionModeBase>::SharedPtr
+      set_position_mode_base_service_;
 
   // Current Control Services
   rclcpp::Service<dg_msgs::srv::SetCurrentControlMode>::SharedPtr
@@ -1370,6 +1566,10 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
       set_target_current_finger_service_;
   rclcpp::Service<dg_msgs::srv::SetTargetCurrentAll>::SharedPtr
       set_target_current_all_service_;
+  rclcpp::Service<dg_msgs::srv::SetTargetCurrentBase>::SharedPtr
+      set_target_current_base_service_;
+  rclcpp::Service<dg_msgs::srv::SetJointEncoderZero>::SharedPtr
+      set_joint_encoder_zero_service_;
 
   // Recipe Services
   rclcpp::Service<dg_msgs::srv::UpdateRecipeCurrentPoseData>::SharedPtr

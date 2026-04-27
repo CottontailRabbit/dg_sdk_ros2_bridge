@@ -1,0 +1,8 @@
+# MoveJointBase service
+# Performs a repositioning of the base joints (DG-4F)
+
+# Request
+float32[2] target_joint  # Enter the target position values (in degrees) for base joints
+---
+# Response
+int32 result  # DG_RESULT enum value

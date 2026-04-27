@@ -1,0 +1,8 @@
+# SetPositionModeBase service
+# Set the position control mode for the base joints (DG-4F)
+
+# Request
+int32[2] position_mode  # Enable position control mode for base joints
+---
+# Response
+int32 result  # DG_RESULT enum value

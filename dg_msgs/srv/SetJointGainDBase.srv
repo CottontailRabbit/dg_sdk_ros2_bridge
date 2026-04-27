@@ -1,0 +1,8 @@
+# SetJointGainDBase service
+# Sets the D Gain value for the base joints (DG-4F)
+
+# Request
+float32[2] gain_d  # Enter D Gain for base joints
+---
+# Response
+int32 result  # DG_RESULT enum value

@@ -1,0 +1,8 @@
+# SetMotionTimeBase service
+# Set the position travel time for the base joints (DG-4F)
+
+# Request
+int32[2] motion_time  # Set the time to move the location (in ms) for base joints
+---
+# Response
+int32 result  # DG_RESULT enum value
