@@ -28,6 +28,15 @@ extern "C"
 #endif
 
 	/********************************************************************************************
+	****    Library version getter
+	*********************************************************************************************/
+	/// @ brief Set to establish communication with the gripper. This function should be the highest priority, and if it is not performed, all other functions cannot be performed.
+	/// @ returns
+	/// 	#Value																	#Description
+	///		int[3]																 		[major, minor, patch] 
+	DGSDK void GetLibraryVersion(int* version) noexcept;
+
+	/********************************************************************************************
 	****    System Setting Functions
 	*********************************************************************************************/
 	/// @ brief Set to establish communication with the gripper. This function should be the highest priority, and if it is not performed, all other functions cannot be performed.
@@ -218,7 +227,7 @@ extern "C"
 	///		DG_RESULT_SYSTEM_SETTING_NOT_PERFORMED						No system setup
 	///		DG_RESULT_DIAGNOSING_SYSTEM										Running diagnostic mode
 	///		DG_RESULT_DATA_IS_NOT_BOOLEAN									Only 0 and 1 can be entered
-	DGSDK DG_RESULT SetGPIOOuput(int gpio, int outputNumber);
+	DGSDK DG_RESULT SetGPIOOutput(int gpio, int outputNumber);
 
 	/// @ brief Sets the gripper global GPIO output. 
 	/// @ param
@@ -230,7 +239,7 @@ extern "C"
 	///		DG_RESULT_SYSTEM_SETTING_NOT_PERFORMED						No system setup
 	///		DG_RESULT_DIAGNOSING_SYSTEM										Running diagnostic mode
 	///		DG_RESULT_DATA_IS_NOT_BOOLEAN									Only 0 and 1 can be entered
-	DGSDK DG_RESULT SetGPIOOuputAll(int* output);
+	DGSDK DG_RESULT SetGPIOOutputAll(int* output);
 
 	/// @ brief Set the torque limit mode for the gripper.
 	/// @ param
@@ -277,13 +286,13 @@ extern "C"
 	DGSDK DG_RESULT EEPROMWrite();
 
 	/// @ brief Run the gripper self-diagnostics. Diagnoses motor communication, control cycles, temperature, current, articulation, and vibration. 
-///		No commands can be performed during diagnostics, and if any abnormalities occur, diagnostics will end, and control will be aborted.
-/// @ returns
-/// 	#Value																			#Description
-///		DG_RESULT_NONE															Normal
-///		DG_RESULT_SYSTEM_SETTING_NOT_PERFORMED						No system setup
-///		DG_RESULT_DIAGNOSING_SYSTEM										Running diagnostic mode
-///		DG_RESULT_IS_MOVING														Gripper in motion
+	///		No commands can be performed during diagnostics, and if any abnormalities occur, diagnostics will end, and control will be aborted.
+	/// @ returns
+	/// 	#Value																			#Description
+	///		DG_RESULT_NONE															Normal
+	///		DG_RESULT_SYSTEM_SETTING_NOT_PERFORMED						No system setup
+	///		DG_RESULT_DIAGNOSING_SYSTEM										Running diagnostic mode
+	///		DG_RESULT_IS_MOVING														Gripper in motion
 	DGSDK DG_RESULT SystemDiagnosis();
 
 	/// @ Backup Settings is a feature that allows you to back up the currently applied data and save it to your PC
@@ -366,6 +375,19 @@ extern "C"
 	///		DG_RESULT_OVERFLOW_FINGER_COUNT								Finger number entry error
 	DGSDK DG_RESULT SetJointGainPFinger(float* gainP, int fingerNumber);
 
+	/// @ brief Sets the P gain value for base joints of DG-4F-M.
+	/// @ param
+	///		#Data Types					#Variables									#Description
+	///		float*								gainP											Enter P Gain
+	///		int									fingerNumber								Enter the finger number
+	/// @ returns
+	/// 	#Value																			#Description
+	///		DG_RESULT_NONE															Normal
+	///		DG_RESULT_SYSTEM_SETTING_NOT_PERFORMED						No system setup
+	///		DG_RESULT_VALUE_IS_NEGATIVE											Cannot enter negative values
+	///		DG_RESULT_OVERFLOW_FINGER_COUNT								Finger number entry error
+	DGSDK DG_RESULT SetJointGainPBase(float* gainP);
+
 	/// @ brief Sets the P Gain value for all joints.
 	/// @ param
 	///		#Data Types					#Variables									#Description
@@ -402,6 +424,19 @@ extern "C"
 	///		DG_RESULT_VALUE_IS_NEGATIVE											Cannot enter negative values
 	///		DG_RESULT_OVERFLOW_FINGER_COUNT								Finger number entry error
 	DGSDK DG_RESULT SetJointGainDFinger(float* gainD, int fingerNumber);
+
+	/// @ brief Sets the D gain value for base joints of DG-4F-M.
+	/// @ param
+	///		#Data Types					#Variables									#Description
+	///		float*								gainD											Enter D Gain
+	///		int									fingerNumber								Enter the finger number
+	/// @ returns
+	/// 	#Value																			#Description
+	///		DG_RESULT_NONE															Normal
+	///		DG_RESULT_SYSTEM_SETTING_NOT_PERFORMED						No system setup
+	///		DG_RESULT_VALUE_IS_NEGATIVE											Cannot enter negative values
+	///		DG_RESULT_OVERFLOW_FINGER_COUNT								Finger number entry error
+	DGSDK DG_RESULT SetJointGainDBase(float* gainD);
 
 	/// @ brief Sets the D Gain value for all joints.
 	/// @ param
@@ -441,6 +476,20 @@ extern "C"
 	///		DG_RESULT_VALUE_IS_NEGATIVE											Cannot enter negative values
 	///		DG_RESULT_OVERFLOW_FINGER_COUNT								Finger number entry error
 	DGSDK DG_RESULT SetJointGainIFinger(float* gainI, float* iLimit, int fingerNumber);
+
+	/// @ brief Set the I-gain value and error integral maximum for base joints of DG-4F-M.
+	/// @ param
+	///		#Data Types					#Variables									#Description
+	///		float*								gainI											Enter the I gain
+	///		float*								iLimit											Setting the Error Integral Maximum
+	///		int									fingerNumber								Enter the finger number
+	/// @ returns
+	/// 	#Value																			#Description
+	///		DG_RESULT_NONE															Normal
+	///		DG_RESULT_SYSTEM_SETTING_NOT_PERFORMED						No system setup
+	///		DG_RESULT_VALUE_IS_NEGATIVE											Cannot enter negative values
+	///		DG_RESULT_OVERFLOW_FINGER_COUNT								Finger number entry error
+	DGSDK DG_RESULT SetJointGainIBase(float* gainI, float* iLimit);
 
 	/// @ brief Sets the I-gain value and error integral maximum for all joints.
 	/// @ param
@@ -497,6 +546,22 @@ extern "C"
 	///		DG_RESULT_OVERFLOW_FINGER_COUNT								Finger number entry error
 	DGSDK DG_RESULT SetJointGainPIDFinger(float* gainP, float* gainD, float* gainI, float* iLimit, int fingerNumber);
 
+	/// @ brief Set the maximum values for P, I, D gain and error integration for base joints of DG-4F-M.
+	/// @ param
+	///		#Data Types					#Variables									#Description
+	///	    float*								gainP											Enter P Gain
+	///		float*								gainD											Enter the D gain
+	///		float*								gainI											Enter the I gain
+	///		float*								iLimit											Setting the Error Integral Maximum
+	///		int									fingerNumber								Enter the finger  number
+	/// @ returns
+	/// 	#Value																			#Description
+	///		DG_RESULT_NONE															Normal
+	///		DG_RESULT_SYSTEM_SETTING_NOT_PERFORMED						No system setup
+	///		DG_RESULT_VALUE_IS_NEGATIVE											Cannot enter negative values
+	///		DG_RESULT_OVERFLOW_FINGER_COUNT								Finger number entry error
+	DGSDK DG_RESULT SetJointGainPIDBase(float* gainP, float* gainD, float* gainI, float* iLimit);
+
 	/// @ brief Set the maximum values for the P, I, and D gains and error integrals for all joints
 	/// @ param
 	///		#Data Types					#Variables									#Description
@@ -551,6 +616,18 @@ extern "C"
 	///		DG_RESULT_VALUE_IS_NEGATIVE											Cannot enter negative values
 	DGSDK DG_RESULT SetMotionTimeFinger(int* motionTime, int fingerNumber);
 
+	/// @ brief Set the time to move the position of base joints of DG4F.
+	/// @ param
+	///		#Data Types					#Variables									#Description
+	///	    int*								motionTime									Set the time to move the location (in ms)
+	///		int									fingerNumber								Enter the joint number
+	/// @ returns
+	/// 	#Value																			#Description
+	///		DG_RESULT_NONE															Normal
+	///		DG_RESULT_SYSTEM_SETTING_NOT_PERFORMED						No system setup
+	///		DG_RESULT_VALUE_IS_NEGATIVE											Cannot enter negative values
+	DGSDK DG_RESULT SetMotionTimeBase(int* motionTime);
+
 	/// @ brief Set the position travel time for every joint individually.
 	/// @ param
 	///		#Data Types					#Variables									#Description
@@ -586,10 +663,10 @@ extern "C"
 	///		DG_RESULT_DATA_IS_NOT_BOOLEAN									Only 0 and 1 can be entered
 	DGSDK DG_RESULT SetPositionModeJoint(int positionMode, int jointNumber);
 
-	/// @ brief  Set the position control mode for single finger joints
+	/// @ brief  Set the position control mode for a single finger joints.
 	/// @ param
 	///		#Data Types					#Variables									#Description
-	///	    int*									positionMode								Enable position control mode
+	///	    int*								positionMode								Enable position control mode
 	///		int									fingerNumber								Enter the finger number
 	/// @ returns
 	/// 	#Value																			#Description
@@ -598,6 +675,19 @@ extern "C"
 	///		DG_RESULT_OVERFLOW_FINGER_COUNT								Finger number entry error
 	///		DG_RESULT_DATA_IS_NOT_BOOLEAN									Only 0 and 1 can be entered
 	DGSDK DG_RESULT SetPositionModeFinger(int* positionMode, int fingerNumber);
+
+	/// @ brief  Set the position control mode for base joints of DG-4F-M.
+	/// @ param
+	///		#Data Types					#Variables									#Description
+	///	    int*								positionMode								Enable position control mode
+	///		int									fingerNumber								Enter the finger number
+	/// @ returns
+	/// 	#Value																			#Description
+	///		DG_RESULT_NONE															Normal
+	///		DG_RESULT_SYSTEM_SETTING_NOT_PERFORMED						No system setup
+	///		DG_RESULT_OVERFLOW_FINGER_COUNT								Finger number entry error
+	///		DG_RESULT_DATA_IS_NOT_BOOLEAN									Only 0 and 1 can be entered
+	DGSDK DG_RESULT SetPositionModeBase(int* positionMode);
 
 	/// @ brief  Set the position control mode for single finger joints
 	/// @ param
@@ -649,6 +739,20 @@ extern "C"
 	///		DG_RESULT_OVERFLOW_FINGER_COUNT								Finger number entry error
 	///		DG_RESULT_OVERFLOW_CURRENT_LIMIT								Maximum current value exceeded
 	DGSDK DG_RESULT SetTargetCurrentFinger(int* targetCurrent, int fingerNumber);
+
+	/// @ brief Set the target current value for base joints of DG-4F-M.
+	/// @ param
+	///		#Data Types					#Variables									#Description
+	///	    float*								targetCurrent								Enter a target current value (mA)
+	///		int									fingerNumber								Enter the finger number
+	/// @ returns
+	/// 	#Value																			#Description
+	///		DG_RESULT_NONE															Normal
+	///		DG_RESULT_SYSTEM_SETTING_NOT_PERFORMED						No system setup
+	///		DG_RESULT_DIAGNOSING_SYSTEM										Running diagnostic mode
+	///		DG_RESULT_OVERFLOW_FINGER_COUNT								Finger number entry error
+	///		DG_RESULT_OVERFLOW_CURRENT_LIMIT								Maximum current value exceeded
+	DGSDK DG_RESULT SetTargetCurrentBase(int* targetCurrent);
 
 	/// @ brief Set the target current value for a single finger joint.
 	/// @ param
@@ -878,6 +982,17 @@ extern "C"
 	///		DG_RESULT_DIAGNOSING_SYSTEM										Running diagnostic mode
 	///		DG_RESULT_OVERFLOW_FINGER_COUNT								Finger number entry error
 	DGSDK DG_RESULT MoveJointFinger(float* targetJoint, int fingerNumber);
+
+	/// @ brief Performs a repositioning the base joints of DG4F
+	/// @ param
+	///		#Data Types					#Variables									#Description
+	///	    float*								targetJoint									Enter the target position value (in degrees)
+	/// @ returns
+	/// 	#Value																			#Description
+	///		DG_RESULT_NONE															Normal
+	///		DG_RESULT_SYSTEM_SETTING_NOT_PERFORMED						No system setup
+	///		DG_RESULT_DIAGNOSING_SYSTEM										Running diagnostic mode
+	DGSDK DG_RESULT MoveJointBase(float* targetJoint);
 
 	/// @ brief Performs a repositioning of all joints
 	/// @ param
@@ -1141,7 +1256,7 @@ extern "C"
 	///		int									motionTime									Set offset travel time(ms)
 	/// @ returns	
 	/// 	#Value																			#Description
-	///		DG_RESULT_NONE															Normal
+	///		DG_RESULT_NONE															     Normal
 	///		DG_RESULT_SYSTEM_SETTING_NOT_PERFORMED						No system setup
 	///		DG_RESULT_NOT_SUPPORTED_CONTROL_MODE_OPERATOR		DEVELOPER mode only
 	///		DG_RESULT_DIAGNOSING_SYSTEM										Running diagnostic mode
@@ -1150,8 +1265,15 @@ extern "C"
 	/// @ brief Initializes the finger tip sensor data to zero
 	/// @ returns	
 	/// 	#Value																			#Description
-	///		DG_RESULT_NONE															Normal
+	///		DG_RESULT_NONE															      Normal
 	DGSDK DG_RESULT SetFingerTipDataZero();
+
+	/// @brief Set current position to Encoder zero
+	///  @return 
+	///     #Value																			#Description
+	///     DG_RESULT_NONE																  Normal
+	/// 
+	DGSDK DG_RESULT SetJointEncoderZero();
 
 	/// @ brief This function is a getter that retrieves data from the ReceivedGripperData struct
 	/// @ param
@@ -1212,4 +1334,4 @@ extern "C"
 #endif
 #endif // DGSDK_H
 
-// Version 1.3.0
+// Version 2.0.0

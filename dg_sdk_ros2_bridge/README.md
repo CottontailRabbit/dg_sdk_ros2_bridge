@@ -8,8 +8,10 @@
 >   | Model | Minimum Firmware Version | Required SDK Version | Notes |
 >   |--------|--------------------------|----------------------|--------|
 >   | **B model** | v3.6 or later | **DG SDK v1.6.0+** | Motor direction were revised starting from firmware v3.6.|
->   | **M model** | v2.8 or later | **DG SDK v1.6.0+** | Motor direction were revised starting from firmware v2.8. |
->
+>   | **M model** | v2.8 ~ v.2.x | **DG SDK v1.6.0+** | Motor direction were revised starting from firmware v2.8. |
+>    | **M model** | v3.0 ~ v.3.x | **DG SDK v2.0.0+** | |
+
+
 > - You can obtain the updated SDK library (`libDGSDK.so`) from Tesollo’s official USB package or distribution.  
 >   Replace the existing file in:
 >   ```

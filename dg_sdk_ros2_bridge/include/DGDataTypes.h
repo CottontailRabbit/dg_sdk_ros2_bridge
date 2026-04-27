@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+
 /********************************************************************************************
 ****    Defines
 *********************************************************************************************/
@@ -14,52 +15,55 @@
 /// @brief Maximum number of joints.
 #define MAX_JOINT_COUNT 20
 
-	/// @brief Maximum count of finger
+/// @brief Maximum count of finger
 #define MAX_FINGER_COUNT 5
 
-	/// @brief Maximum joint of finger
+/// @brief Maximum joint of finger
 #define MAX_FINGER_JOINT_COUNT 4
 
-	// @brief Number of Cathexian coordinate system data (x, y, z, rx, ry, rz)
+/// @biref Maximum number of base joints for DG4F
+#define MAX_BASE_JOINT_COUNT 2
+
+// @brief Number of Cathexian coordinate system data (x, y, z, rx, ry, rz)
 #define CARTESIAN_COORDINATE_POSE_COUNT 6
 
-	/// @brief Maximum communication data size
+/// @brief Maximum communication data size
 #define MAX_RECEIVED_DATA_SIZE 1024
 
-	/// @brief Gripper IP Size
+/// @brief Gripper IP Size
 #define MAX_GRIPPER_IP_ADDRESS_SIZE 32
 
-	/// @brief Number of gripper IP address zones
+/// @brief Number of gripper IP address zones
 #define MAX_GRIPPER_IP_BYTE_LENGTH 4
 
-	/// @brief Comport Name Size
+/// @brief Comport Name Size
 #define MAX_COMPORT_NAME_SIZE 32
 
-	/// @brief Number of Blend Motion Saved
+/// @brief Number of Blend Motion Saved
 #define MAX_BLEND_COUNT 10
 
-	///  @brief Number of recipes that store a single blend action
+///  @brief Number of recipes that store a single blend action
 #define MAX_BLEND_ADD_POSE_COUNT 50
 
-	/// @brief Number of recipe poses saved
+/// @brief Number of recipe poses saved
 #define MAX_RECIPE_POSE_COUNT 100
 
-	/// @brief Number of recipe gain stores
+/// @brief Number of recipe gain stores
 #define MAX_RECIPE_GAIN_COUNT 20
 
-	/// @brief Number of recipe grasps saved
+/// @brief Number of recipe grasps saved
 #define MAX_RECIPE_GRASP_COUNT 20
 
-	/// @brief Number of grasp options
+/// @brief Number of grasp options
 #define MAX_GRASP_OPTION_COUNT 2
 
-	/// @brief Number of GPIOs (3 outputs, 1 input)
+/// @brief Number of GPIOs (3 outputs, 1 input)
 #define MAX_GRIPPER_GPIO_SIZE 4
 
-	/// @brief Number of data types you can receive
-#define MAX_RECEIVED_DATA_TYPE_COUNT 6 
+/// @brief Number of data types you can receive
+#define MAX_RECEIVED_DATA_TYPE_COUNT 7 
 
-	/// @ brief Definition of PI and conversion between Radian and Degree
+/// @ brief Definition of PI and conversion between Radian and Degree
 #define PI 3.1415927f
 #define DEGREE_TO_RADIAN PI/180.0f
 #define RADIAN_TO_DEGREE 180.0f/PI
@@ -111,11 +115,37 @@ typedef enum DG_RESULT
 	DG_RESULT_ACTIVATE_GRASP_MOTION,
 	DG_RESULT_ACTIVATE_MANUAL_CONTROL_MODE,
 
+	DG_RESULT_MODULE_FAULT_1 = 401,
+	DG_RESULT_MODULE_FAULT_2,
+	DG_RESULT_MODULE_FAULT_3,
+	DG_RESULT_MODULE_FAULT_4,
+	DG_RESULT_MODULE_FAULT_5,
+	DG_RESULT_MODULE_FAULT_6,
+	DG_RESULT_MODULE_FAULT_7,
+	DG_RESULT_MODULE_FAULT_8,
+	DG_RESULT_MODULE_FAULT_9,
+	DG_RESULT_MODULE_FAULT_10,
+	DG_RESULT_MODULE_FAULT_11,
+	DG_RESULT_MODULE_FAULT_12,
+	DG_RESULT_MODULE_FAULT_13,
+	DG_RESULT_MODULE_FAULT_14,
+	DG_RESULT_MODULE_FAULT_15,
+	DG_RESULT_MODULE_FAULT_16,
+	DG_RESULT_MODULE_FAULT_17,
+	DG_RESULT_MODULE_FAULT_18,
+	DG_RESULT_MODULE_FAULT_19,
+	DG_RESULT_MODULE_FAULT_20,
+	DG_RESULT_MODULE_FAULT_21,
+	DG_RESULT_MODULE_FAULT_22,
+	DG_RESULT_MODULE_FAULT_23,
+	DG_RESULT_MODULE_FAULT_24,
+	DG_RESULT_MODULE_FAULT_25,
+
 	DG_RESULT_SOCK_EXCEPTION = 500,
 	DG_RESULT_SOCK_FAILED_WSA_START_UP = 501,
 
 	DG_RESULT_NO_GRASP_OBJECT = 1002,
-	DG_RESULT_3F_ONLY_SUPPORTED_3FINGER,
+	DG_RESULT_ONLY_SUPPORTED_3FINGER,
 
 	DG_RESULT_NOT_SUPPORTED_CONTROL_MODE_OPERATOR,
 	DG_RESULT_NOT_SUPPORTED_CONTROL_MODE_DEVELOPER,
@@ -133,19 +163,27 @@ typedef enum DG_RESULT
 
 }DG_RESULT;
 
-
 /// @brief Enumerated constants for setting up gripper models
 typedef enum DG_MODEL
 {
 	DG_MODEL_NONE = 0x0000,
 
+	DG_MODEL_DG_1F_M = 0x1F02,
+	DG_MODEL_DG_2F_M = 0x2F02,
+
 	DG_MODEL_DG_3F_B = 0x3F01,
 	DG_MODEL_DG_3F_M = 0x3F02,
 
-	DG_MODEL_DG_4F = 0x4F02,
+	DG_MODEL_DG_4F_M = 0x4F02,
 
 	DG_MODEL_DG_5F_LEFT = 0x5F12,
 	DG_MODEL_DG_5F_RIGHT = 0x5F22,
+
+	DG_MODEL_DG_5F_S_LEFT = 0x5F14,
+	DG_MODEL_DG_5F_S_RIGHT = 0x5F24,
+
+	DG_MODEL_DG_5F_S15_LEFT = 0x5F34,
+	DG_MODEL_DG_5F_S15_RIGHT = 0x5F44,
 }DG_MODEL;
 
 /// @brief Enumerated constants for checking state in blend behavior
@@ -193,6 +231,7 @@ typedef enum DEVELOPER_MODE_COMMAND
 	DEVELOPER_MODE_COMMAND_GET_ID_AND_VERSION = 0x08,
 	DEVELOPER_MODE_COMMAND_GET_JOINT_ID = 0x09,
 	DEVELOPER_MODE_COMMAND_SET_BOOT_MODE = 0x0A,
+	DEVELOPER_MODE_COMMAND_SET_FT_OFFSET_ZERO = 0x0B,
 }DG_CONTROL_COMMAND;
 
 /// @brief Enumeration of data types that can be received from the gripper
@@ -204,6 +243,7 @@ typedef enum DEVELOPER_MODE_RECEIVED_DATA_TYPE
 	DEVELOPER_MODE_RECEIVED_DATA_TYPE_VELOCITY,
 	DEVELOPER_MODE_RECEIVED_DATA_TYPE_FINGER_FT_SENSOR,
 	DEVELOPER_MODE_RECEIVED_DATA_TYPE_GPIO,
+	DEVELOPER_MODE_RECEIVED_DATA_TYPE_MODULE_ERROR_CODE,
 }RECEIVED_DATA_TYPE;
 
 /// @brief Enumerated constants for setting gripper grasp mode
@@ -212,6 +252,7 @@ typedef enum DEVELOPER_MODE_RECEIVED_DATA_TYPE
 typedef enum DG_GRASP_MODE
 {
 	DG_GRASP_MODE_NONE,
+
 	DG_GRASP_MODE_3F_3FINGER,
 	DG_GRASP_MODE_3F_2FINGER_1_AND_2,
 	DG_GRASP_MODE_3F_2FINGER_1_AND_3,
@@ -227,7 +268,20 @@ typedef enum DG_GRASP_MODE
 	DG_GRASP_MODE_5F_2FINGER_1_AND_4,
 	DG_GRASP_MODE_5F_2FINGER_1_AND_5,
 	DG_GRASP_MODE_5F_5FINGER_PARALLEL,
-	DG_GRASP_MODE_5F_5FINGER_ENVELOP, 
+	DG_GRASP_MODE_5F_5FINGER_ENVELOP,
+
+	DG_GRASP_MODE_4F_4FINGER = 31,
+	DG_GRASP_MODE_4F_4FINGER_PARALLEL,
+	DG_GRASP_MODE_4F_4FINGER_ENVELOP,
+	DG_GRASP_MODE_4F_4FINGER_RIGHT_PARALLEL,
+	DG_GRASP_MODE_4F_4FINGER_LEFT_PARALLEL,
+	DG_GRASP_MODE_4F_2FINGER_1_AND_2,
+	DG_GRASP_MODE_4F_2FINGER_1_AND_4,
+	DG_GRASP_MODE_4F_2FINGER_3_AND_4,
+
+	DG_GRASP_MODE_2F_2FINGER = 51,
+	DG_GRASP_MODE_2F_2FINGER_ENVELOP,
+
 }DG_GRASP_MODE;
 
 /// @brief Enumeration constants for setting gripper grasp options
@@ -238,7 +292,7 @@ typedef enum DG_GRASP_OPTION
 	DG_GRASP_OPTION_NONE = 0,
 	DG_GRASP_OPTION_PARALLEL,
 	DG_GRASP_OPTION_FIX_TILT,
-	DG_GRASP_OPTION_LOAD_POSTURE,
+	DG_GRASP_OPTION_SET_TILT,
 }DG_GRASP_OPTION;
 
 /// @brief Enumeration for checking diagnostic status during gripper diagnostics
@@ -256,6 +310,16 @@ typedef enum DG_DIAGNOSIS
 	DG_DIAGNOSIS_RESULT_FAULT = 200,
 }DG_DIAGNOSIS;
 
+/// @brief Enumeration constant for identify attached sensor type
+typedef enum DG_SENSOR_TYPE
+{
+	DG_SENSOR_TYPE_FT_SENSOR_6_AXIS = 1,
+	DG_SENSOR_TYPE_FT_SENSOR_3_AXIS,
+	DG_SENSOR_TYPE_TACTILE_M,
+	DG_SENSOR_TYPE_FT_SENSOR_4_AXIS,
+	DG_SENSOR_TYPE_TACTILE_S
+}DG_SENSOR_TYPE;
+
 #ifdef __linux__
 #pragma pack(push, 1)
 #endif
@@ -265,15 +329,15 @@ typedef enum DG_DIAGNOSIS
 /// @brief Struct for checking the data provided by the gripper
 ///Name					Size(byte)		Description
 ///joint					80					Position information for gripper joints(Unit: degree)
-///current				80					Current Information for Gripper Joints/(Unit: mA)
-///velocity				80					Velocity Information for Gripper Joints(Unit: rpm) (DG - 3F - B models are not supported)
-///temperature			80					Temperature information for gripper joints(Unit: ï¿½ï¿½C) (DG - 3F - B models are not supported)
-///TCP					120				Coordinates of each fingertip endpoint(Unit: Postioin = mm, Rotation = degree) (x, y, z, rx, ry, rz)
-///moving				4					Movement state information for all joints of the gripper
-///targetArrived		4					Target Position Arrival Status Information for All Gripper Joints
-///blendMoveStatus	4					Status information when using the Blend Joint feature
-///productID			4					Gripper ID
-///firmwareVerision	4					Gripper firmware version
+///current					80					Current Information for Gripper Joints/(Unit: mA)
+///velocity					80					Velocity Information for Gripper Joints(Unit: rpm) (DG - 3F - B models are not supported)
+///temperature			80					Temperature information for gripper joints(Unit: ¡ÆC) (DG - 3F - B models are not supported)
+///TCP						120				Coordinates of each fingertip endpoint(Unit: Postioin = mm, Rotation = degree) (x, y, z, rx, ry, rz)
+///moving					4					Movement state information for all joints of the gripper
+///targetArrived			4					Target Position Arrival Status Information for All Gripper Joints
+///blendMoveStatus		4					Status information when using the Blend Joint feature
+///productID				4					Gripper ID
+///firmwareVerision		4					Gripper firmware version
 typedef struct ReceivedGripperData
 {
 	float joint[MAX_JOINT_COUNT];
@@ -287,12 +351,13 @@ typedef struct ReceivedGripperData
 	int currentBlendIndex;
 	int productID;
 	int firmwareVersion;
+	int moduleErrorCode;
 }ReceivedGripperData;
 
 /// @brief Recipe Setup Structures for Using Blend Motion
 ///	Name						Size(byte)				Description
-///	recipePoseNumber	4							Recipe Pose Number
-///	recipeGainNumber	4							Recipe Pain Number
+///	recipePoseNumber		4							Recipe Pose Number
+///	recipeGainNumber		4							Recipe Pain Number
 ///	blendWaitTime			4							Setting the wait time after an action completes
 ///	number					4							Blend action unique number
 typedef struct RecipeBlendData
@@ -308,8 +373,8 @@ typedef struct RecipeBlendData
 ///	comport						8							Setting comfort for RS485 connections
 ///	ip								32							Setting the IP for TCP / IP connections
 ///	port							4							Setting the PORT for TCP / IP connections
-///	readTimeout				4							Setting the communication timeout time
-///	controlMode				4							Setting the Gripper Control Mode
+///	readTimeout					4							Setting the communication timeout time
+///	controlMode					4							Setting the Gripper Control Mode
 ///	communicationMode		4							Setting the Gripper Communication Mode
 ///	slaveID						4							Setting the Slave ID for a Modbus connection
 ///	baudrate						4							Setting the baudrate for RS485 connections
@@ -327,13 +392,13 @@ typedef struct GripperSystemSetting
 
 /// @brief Preference Struct for Driving Grippers
 // Name						Size(byte)	Description
-// jointOffset				80				Setting the Position Offset for Gripper Joints
+// jointOffset					80				Setting the Position Offset for Gripper Joints
 // jointInpose				80				Setting the angle to check the reach of a gripper joint
 // tcpInpose					20				Setting the distance to determine the reach of a fingertip location
 // orientationInpose		20				Setting the angle for fingertip reach checks
-// receivedDataType		24				Set the type of data you want to receive
+// receivedDataType			24				Set the type of data you want to receive
 // movingInpose			4				Setting angles to determine movement of gripper joints
-// jointCount				4				Number of joints in the gripper model currently in use
+// jointCount					4				Number of joints in the gripper model currently in use
 // fingerCount				4				The number of fingers of the gripper model currently in use
 // model						4				Set the gripper model you are currently using
 // dutyByteLength			1				Incoming data size for the current model
@@ -353,8 +418,8 @@ typedef struct GripperSetting
 
 /// @brief Preference Struct for Driving Grippers
 ///Name					Size(byte)	Description
-///targetJoint			80				Set Target Joint Position Value
-///jointMotionTime	80				Set the time it takes to reach your target location
+///targetJoint				80				Set Target Joint Position Value
+///jointMotionTime		80				Set the time it takes to reach your target location
 ///number				4				Recipe Pose Unique Number
 ///mode					4				Set position control mode(disabled)
 typedef struct RecipePoseData
@@ -371,7 +436,7 @@ typedef struct RecipePoseData
 /// gainD					80				Setting the D - gain
 /// gainI					80				Setting up I - gain
 /// iLimit					80				Setting the Error Integral Maximum
-/// controlPIDMode	4				Setting the PID Control Mode
+/// controlPIDMode		4				Setting the PID Control Mode
 /// number				4				Recipe gain unique number
 /// mode					4				Set position control mode(disabled)
 typedef struct RecipeGainData
@@ -391,13 +456,13 @@ typedef struct RecipeGainData
 /// graspForce			4				Set grasp strength
 /// positionMode		80				Locking joints in position control instead of grasp mode
 /// graspMode			4				Setting the grasp mode
-/// graspOption		4				Set grasp options
-/// smoothGrasping	4				Set smooth grasp mode
+/// graspOption			4				Set grasp options
+/// smoothGrasping		4				Set smooth grasp mode
 /// number				4				Recipe grasp unique number
 typedef struct RecipeGraspData
 {
 	float graspForce;
-	int postionMode[MAX_JOINT_COUNT];
+	int positionMode[MAX_JOINT_COUNT];
 	int graspMode;
 	int graspOption;
 	int smoothGrasping;
@@ -405,11 +470,18 @@ typedef struct RecipeGraspData
 }RecipeGraspData;
 
 /// @brief Struct for Viewing Gripper Fingertip Sensor Data
-/// Name			Size(byte)	Description
-/// forceTorque		120			Position information for gripper joints
+/// Name				Size(byte)		Description
+/// sensorType			4					Attached sensor type
+/// attachedFinger		20					Attached finger index
+/// forceTorque			120				Force-Torque sensor data
+/// tactTile				180				Tactile sensor data
 typedef struct ReceivedFingertipSensorData
 {
+	int sensorType;
+	int attachedFinger[MAX_FINGER_COUNT];
+
 	float forceTorque[6 * MAX_FINGER_COUNT];
+	uint16_t tactile[18 * MAX_FINGER_COUNT];
 }ReceivedFingertipSensorData;
 
 /// @brief Struct for Checking Gripper GPIO Data
@@ -424,10 +496,10 @@ typedef struct ReceivedGPIOData
 /// Name			Size(byte)	Description
 /// process			4				Processes that are performing diagnostic functions
 /// step				4				Check order for each diagnostic feature
-/// jointId			4				Results when checking intermodule communication
-/// period			4				Resulting values when checking communication cycles
+/// jointId				4				Results when checking intermodule communication
+/// period				4				Resulting values when checking communication cycles
 /// joint				4				Result values when examining joints
-/// temperature	4				Resulting values when temperature is checked
+/// temperature		4				Resulting values when temperature is checked
 typedef struct DiagnosisSystem
 {
 	int process;
@@ -478,4 +550,4 @@ extern "C"
 #endif
 #endif // DGDATATYPES_H
 
-// Version 1.3.0
+// Version 2.0.0

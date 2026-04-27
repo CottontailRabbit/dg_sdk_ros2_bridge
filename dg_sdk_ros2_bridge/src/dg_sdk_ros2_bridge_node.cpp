@@ -672,7 +672,7 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
   void setGPIOOutputCallback(
       const std::shared_ptr<dg_msgs::srv::SetGPIOOutput::Request> request,
       std::shared_ptr<dg_msgs::srv::SetGPIOOutput::Response> response) {
-    DG_RESULT result = SetGPIOOuput(request->gpio, request->output_number);
+    DG_RESULT result = SetGPIOOutput(request->gpio, request->output_number);
     response->result = static_cast<int>(result);
   }
 
@@ -686,7 +686,7 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
          i++) {
       gpio[i] = request->output[i];
     }
-    DG_RESULT result = SetGPIOOuputAll(gpio);
+    DG_RESULT result = SetGPIOOutputAll(gpio);
     response->result = static_cast<int>(result);
   }
 

@@ -24,7 +24,7 @@ add_executable(dg_sdk_ros2_bridge_node
 
 # Link libraries
 target_link_libraries(dg_sdk_ros2_bridge_node
-  ${CMAKE_CURRENT_SOURCE_DIR}/libs/libDGSDK.so
+  ${CMAKE_CURRENT_SOURCE_DIR}/libs/libDGSDK_200.so
 )
 
 # Target dependencies
@@ -47,7 +47,7 @@ install(DIRECTORY include/
 )
 
 # Install shared library
-install(FILES libs/libDGSDK.so
+install(FILES libs/libDGSDK_200.so
   DESTINATION lib
 )
 
