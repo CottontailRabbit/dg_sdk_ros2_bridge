@@ -47,8 +47,10 @@ install(DIRECTORY include/
 )
 
 # Install shared library
+# Rename to libDGSDK.so to match the SONAME embedded in the .so
 install(FILES libs/libDGSDK_200.so
   DESTINATION lib
+  RENAME libDGSDK.so
 )
 
 if(BUILD_TESTING)
