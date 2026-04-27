@@ -13,8 +13,8 @@ float32[5] tcp_inpose
 # Setting the angle for fingertip reach checks
 float32[5] orientation_inpose
 
-# Set the type of data you want to receive
-int32[6] received_data_type
+# Set the type of data you want to receive (MAX_RECEIVED_DATA_TYPE_COUNT = 8)
+int32[8] received_data_type
 
 # Setting angles to determine movement of gripper joints
 float32 moving_inpose

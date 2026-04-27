@@ -33,3 +33,9 @@ int32 product_id
 
 # Gripper firmware version
 int32 firmware_version
+
+# Module communication error code
+int32 module_error_code
+
+# Gripper internal control period
+int32 control_period

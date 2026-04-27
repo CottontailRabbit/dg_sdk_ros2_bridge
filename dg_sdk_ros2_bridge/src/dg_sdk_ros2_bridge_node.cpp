@@ -87,6 +87,8 @@ class DGSDKRos2Bridge : public rclcpp::Node {
     msg.current_blend_index = data.currentBlendIndex;
     msg.product_id = data.productID;
     msg.firmware_version = data.firmwareVersion;
+    msg.module_error_code = data.moduleErrorCode;
+    msg.control_period = data.controlPeriod;
 
     // Publish the gripper data
     if (instance_) {
@@ -132,12 +134,17 @@ class DGSDKRos2Bridge : public rclcpp::Node {
   }
 
   static void RecvSensorData(const ReceivedFingertipSensorData recvSensorData) {
-    // float forceTorque[6 * MAX_FINGER_COUNT];
-    // sensorData = recvSensorData;
     auto msg = dg_msgs::msg::ReceivedFingertipSensorData();
+    msg.sensor_type = recvSensorData.sensorType;
+    std::copy(recvSensorData.attachedFinger,
+              recvSensorData.attachedFinger + MAX_FINGER_COUNT,
+              msg.attached_finger.begin());
     std::copy(recvSensorData.forceTorque,
               recvSensorData.forceTorque + 6 * MAX_FINGER_COUNT,
               msg.force_torque.begin());
+    std::copy(recvSensorData.tactile,
+              recvSensorData.tactile + 18 * MAX_FINGER_COUNT,
+              msg.tactile.begin());
 
     if (instance_) {
       instance_->fingertip_sensor_publisher_->publish(msg);
@@ -658,6 +665,7 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
     setting.jointCount = request->setting.joint_count;
     setting.fingerCount = request->setting.finger_count;
     setting.model = static_cast<DG_MODEL>(request->setting.model);
+    setting.dutyByteLength = request->setting.duty_byte_length;
 
     DG_RESULT result = SetGripperOption(setting);
     
@@ -868,6 +876,8 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
       response->gripper_data.current_blend_index = data.currentBlendIndex;
       response->gripper_data.product_id = data.productID;
       response->gripper_data.firmware_version = data.firmwareVersion;
+      response->gripper_data.module_error_code = data.moduleErrorCode;
+      response->gripper_data.control_period = data.controlPeriod;
     }
 
     response->result = static_cast<int>(result);
