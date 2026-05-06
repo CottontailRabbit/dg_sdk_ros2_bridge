@@ -1,0 +1,9 @@
+# SetJointCurrentGainPFinger service
+# Sets the current-loop P gain for one finger (4 joints)
+
+# Request
+float32[4] current_gain_p  # Enter current-loop P gain for each joint of the finger
+int32 finger_number  # Enter the finger number
+---
+# Response
+int32 result  # DG_RESULT enum value

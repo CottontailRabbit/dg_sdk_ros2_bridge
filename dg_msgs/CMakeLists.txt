@@ -79,6 +79,14 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/SetTargetCurrentFinger.srv"
   "srv/SetTargetCurrentAll.srv"
   "srv/SetTargetCurrentBase.srv"
+  "srv/SetJointCurrentGainP.srv"
+  "srv/SetJointCurrentGainPFinger.srv"
+  "srv/SetJointCurrentGainPAll.srv"
+  "srv/SetJointCurrentGainPBase.srv"
+  "srv/SetJointCurrentGainI.srv"
+  "srv/SetJointCurrentGainIFinger.srv"
+  "srv/SetJointCurrentGainIAll.srv"
+  "srv/SetJointCurrentGainIBase.srv"
   "srv/SetJointEncoderZero.srv"
   
   # Recipe Services

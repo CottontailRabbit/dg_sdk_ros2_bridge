@@ -1,0 +1,9 @@
+# SetJointCurrentGainP service
+# Sets the current-loop P gain for one joint
+
+# Request
+float32 current_gain_p  # Enter current-loop P gain
+int32 joint_number  # Enter the joint number
+---
+# Response
+int32 result  # DG_RESULT enum value

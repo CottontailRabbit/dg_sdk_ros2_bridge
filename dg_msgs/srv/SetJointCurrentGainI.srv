@@ -1,0 +1,10 @@
+# SetJointCurrentGainI service
+# Sets the current-loop I gain and integral limit for one joint
+
+# Request
+float32 current_gain_i  # Enter current-loop I gain
+float32 current_i_limit  # Setting the current Integral Maximum
+int32 joint_number  # Enter the joint number
+---
+# Response
+int32 result  # DG_RESULT enum value

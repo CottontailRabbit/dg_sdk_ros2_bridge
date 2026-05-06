@@ -1,0 +1,8 @@
+# SetJointCurrentGainPBase service
+# Sets the current-loop P gain for the base joints (DG-4F)
+
+# Request
+float32[2] current_gain_p  # Enter current-loop P gain for base joints
+---
+# Response
+int32 result  # DG_RESULT enum value

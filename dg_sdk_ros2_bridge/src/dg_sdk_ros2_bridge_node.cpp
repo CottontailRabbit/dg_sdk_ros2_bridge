@@ -504,6 +504,55 @@ class DGSDKRos2Bridge : public rclcpp::Node {
             std::bind(&DGSDKRos2Bridge::setTargetCurrentBaseCallback, this,
                       std::placeholders::_1, std::placeholders::_2));
 
+    // Joint Current Gain Functions
+    set_joint_current_gain_p_service_ =
+        this->create_service<dg_msgs::srv::SetJointCurrentGainP>(
+            "/dg/set_joint_current_gain_p",
+            std::bind(&DGSDKRos2Bridge::setJointCurrentGainPCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
+    set_joint_current_gain_p_finger_service_ =
+        this->create_service<dg_msgs::srv::SetJointCurrentGainPFinger>(
+            "/dg/set_joint_current_gain_p_finger",
+            std::bind(&DGSDKRos2Bridge::setJointCurrentGainPFingerCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
+    set_joint_current_gain_p_all_service_ =
+        this->create_service<dg_msgs::srv::SetJointCurrentGainPAll>(
+            "/dg/set_joint_current_gain_p_all",
+            std::bind(&DGSDKRos2Bridge::setJointCurrentGainPAllCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
+    set_joint_current_gain_p_base_service_ =
+        this->create_service<dg_msgs::srv::SetJointCurrentGainPBase>(
+            "/dg/set_joint_current_gain_p_base",
+            std::bind(&DGSDKRos2Bridge::setJointCurrentGainPBaseCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
+    set_joint_current_gain_i_service_ =
+        this->create_service<dg_msgs::srv::SetJointCurrentGainI>(
+            "/dg/set_joint_current_gain_i",
+            std::bind(&DGSDKRos2Bridge::setJointCurrentGainICallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
+    set_joint_current_gain_i_finger_service_ =
+        this->create_service<dg_msgs::srv::SetJointCurrentGainIFinger>(
+            "/dg/set_joint_current_gain_i_finger",
+            std::bind(&DGSDKRos2Bridge::setJointCurrentGainIFingerCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
+    set_joint_current_gain_i_all_service_ =
+        this->create_service<dg_msgs::srv::SetJointCurrentGainIAll>(
+            "/dg/set_joint_current_gain_i_all",
+            std::bind(&DGSDKRos2Bridge::setJointCurrentGainIAllCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
+    set_joint_current_gain_i_base_service_ =
+        this->create_service<dg_msgs::srv::SetJointCurrentGainIBase>(
+            "/dg/set_joint_current_gain_i_base",
+            std::bind(&DGSDKRos2Bridge::setJointCurrentGainIBaseCallback, this,
+                      std::placeholders::_1, std::placeholders::_2));
+
     set_joint_encoder_zero_service_ =
         this->create_service<dg_msgs::srv::SetJointEncoderZero>(
             "/dg/set_joint_encoder_zero",
@@ -1341,6 +1390,131 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
     response->result = static_cast<int>(result);
   }
 
+  // Joint Current Gain P Functions
+  void setJointCurrentGainPCallback(
+      const std::shared_ptr<dg_msgs::srv::SetJointCurrentGainP::Request>
+          request,
+      std::shared_ptr<dg_msgs::srv::SetJointCurrentGainP::Response> response) {
+    DG_RESULT result =
+        SetJointCurrentGainP(request->current_gain_p, request->joint_number);
+    response->result = static_cast<int>(result);
+  }
+
+  void setJointCurrentGainPFingerCallback(
+      const std::shared_ptr<dg_msgs::srv::SetJointCurrentGainPFinger::Request>
+          request,
+      std::shared_ptr<dg_msgs::srv::SetJointCurrentGainPFinger::Response>
+          response) {
+    float currentGainP[MAX_JOINT_COUNT];
+    for (int i = 0; i < MAX_JOINT_COUNT; i++) {
+      currentGainP[i] = i < static_cast<int>(request->current_gain_p.size())
+                            ? request->current_gain_p[i]
+                            : 0.0f;
+    }
+    DG_RESULT result =
+        SetJointCurrentGainPFinger(currentGainP, request->finger_number);
+    response->result = static_cast<int>(result);
+  }
+
+  void setJointCurrentGainPAllCallback(
+      const std::shared_ptr<dg_msgs::srv::SetJointCurrentGainPAll::Request>
+          request,
+      std::shared_ptr<dg_msgs::srv::SetJointCurrentGainPAll::Response>
+          response) {
+    float currentGainP[MAX_JOINT_COUNT];
+    for (int i = 0; i < MAX_JOINT_COUNT; i++) {
+      currentGainP[i] = i < static_cast<int>(request->current_gain_p.size())
+                            ? request->current_gain_p[i]
+                            : 0.0f;
+    }
+    DG_RESULT result = SetJointCurrentGainPAll(currentGainP);
+    response->result = static_cast<int>(result);
+  }
+
+  void setJointCurrentGainPBaseCallback(
+      const std::shared_ptr<dg_msgs::srv::SetJointCurrentGainPBase::Request>
+          request,
+      std::shared_ptr<dg_msgs::srv::SetJointCurrentGainPBase::Response>
+          response) {
+    float currentGainP[MAX_BASE_JOINT_COUNT];
+    for (int i = 0; i < MAX_BASE_JOINT_COUNT; i++) {
+      currentGainP[i] = i < static_cast<int>(request->current_gain_p.size())
+                            ? request->current_gain_p[i]
+                            : 0.0f;
+    }
+    DG_RESULT result = SetJointCurrentGainPBase(currentGainP);
+    response->result = static_cast<int>(result);
+  }
+
+  // Joint Current Gain I Functions
+  void setJointCurrentGainICallback(
+      const std::shared_ptr<dg_msgs::srv::SetJointCurrentGainI::Request>
+          request,
+      std::shared_ptr<dg_msgs::srv::SetJointCurrentGainI::Response> response) {
+    DG_RESULT result =
+        SetJointCurrentGainI(request->current_gain_i, request->current_i_limit,
+                             request->joint_number);
+    response->result = static_cast<int>(result);
+  }
+
+  void setJointCurrentGainIFingerCallback(
+      const std::shared_ptr<dg_msgs::srv::SetJointCurrentGainIFinger::Request>
+          request,
+      std::shared_ptr<dg_msgs::srv::SetJointCurrentGainIFinger::Response>
+          response) {
+    float currentGainI[MAX_JOINT_COUNT];
+    float currentILimit[MAX_JOINT_COUNT];
+    for (int i = 0; i < MAX_JOINT_COUNT; i++) {
+      currentGainI[i] = i < static_cast<int>(request->current_gain_i.size())
+                            ? request->current_gain_i[i]
+                            : 0.0f;
+      currentILimit[i] = i < static_cast<int>(request->current_i_limit.size())
+                             ? request->current_i_limit[i]
+                             : 0.0f;
+    }
+    DG_RESULT result = SetJointCurrentGainIFinger(currentGainI, currentILimit,
+                                                  request->finger_number);
+    response->result = static_cast<int>(result);
+  }
+
+  void setJointCurrentGainIAllCallback(
+      const std::shared_ptr<dg_msgs::srv::SetJointCurrentGainIAll::Request>
+          request,
+      std::shared_ptr<dg_msgs::srv::SetJointCurrentGainIAll::Response>
+          response) {
+    float currentGainI[MAX_JOINT_COUNT];
+    float currentILimit[MAX_JOINT_COUNT];
+    for (int i = 0; i < MAX_JOINT_COUNT; i++) {
+      currentGainI[i] = i < static_cast<int>(request->current_gain_i.size())
+                            ? request->current_gain_i[i]
+                            : 0.0f;
+      currentILimit[i] = i < static_cast<int>(request->current_i_limit.size())
+                             ? request->current_i_limit[i]
+                             : 0.0f;
+    }
+    DG_RESULT result = SetJointCurrentGainIAll(currentGainI, currentILimit);
+    response->result = static_cast<int>(result);
+  }
+
+  void setJointCurrentGainIBaseCallback(
+      const std::shared_ptr<dg_msgs::srv::SetJointCurrentGainIBase::Request>
+          request,
+      std::shared_ptr<dg_msgs::srv::SetJointCurrentGainIBase::Response>
+          response) {
+    float currentGainI[MAX_BASE_JOINT_COUNT];
+    float currentILimit[MAX_BASE_JOINT_COUNT];
+    for (int i = 0; i < MAX_BASE_JOINT_COUNT; i++) {
+      currentGainI[i] = i < static_cast<int>(request->current_gain_i.size())
+                            ? request->current_gain_i[i]
+                            : 0.0f;
+      currentILimit[i] = i < static_cast<int>(request->current_i_limit.size())
+                             ? request->current_i_limit[i]
+                             : 0.0f;
+    }
+    DG_RESULT result = SetJointCurrentGainIBase(currentGainI, currentILimit);
+    response->result = static_cast<int>(result);
+  }
+
   void setJointEncoderZeroCallback(
       const std::shared_ptr<dg_msgs::srv::SetJointEncoderZero::Request>,
       std::shared_ptr<dg_msgs::srv::SetJointEncoderZero::Response> response) {
@@ -1578,6 +1752,22 @@ RCLCPP_INFO(this->get_logger(), "Gripper Option Set Result: %d", result);
       set_target_current_all_service_;
   rclcpp::Service<dg_msgs::srv::SetTargetCurrentBase>::SharedPtr
       set_target_current_base_service_;
+  rclcpp::Service<dg_msgs::srv::SetJointCurrentGainP>::SharedPtr
+      set_joint_current_gain_p_service_;
+  rclcpp::Service<dg_msgs::srv::SetJointCurrentGainPFinger>::SharedPtr
+      set_joint_current_gain_p_finger_service_;
+  rclcpp::Service<dg_msgs::srv::SetJointCurrentGainPAll>::SharedPtr
+      set_joint_current_gain_p_all_service_;
+  rclcpp::Service<dg_msgs::srv::SetJointCurrentGainPBase>::SharedPtr
+      set_joint_current_gain_p_base_service_;
+  rclcpp::Service<dg_msgs::srv::SetJointCurrentGainI>::SharedPtr
+      set_joint_current_gain_i_service_;
+  rclcpp::Service<dg_msgs::srv::SetJointCurrentGainIFinger>::SharedPtr
+      set_joint_current_gain_i_finger_service_;
+  rclcpp::Service<dg_msgs::srv::SetJointCurrentGainIAll>::SharedPtr
+      set_joint_current_gain_i_all_service_;
+  rclcpp::Service<dg_msgs::srv::SetJointCurrentGainIBase>::SharedPtr
+      set_joint_current_gain_i_base_service_;
   rclcpp::Service<dg_msgs::srv::SetJointEncoderZero>::SharedPtr
       set_joint_encoder_zero_service_;
 

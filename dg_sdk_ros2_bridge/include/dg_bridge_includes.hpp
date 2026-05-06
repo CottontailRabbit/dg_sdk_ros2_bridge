@@ -72,6 +72,14 @@
 #include "dg_msgs/srv/set_target_current_finger.hpp"
 #include "dg_msgs/srv/set_target_current_all.hpp"
 #include "dg_msgs/srv/set_target_current_base.hpp"
+#include "dg_msgs/srv/set_joint_current_gain_p.hpp"
+#include "dg_msgs/srv/set_joint_current_gain_p_finger.hpp"
+#include "dg_msgs/srv/set_joint_current_gain_p_all.hpp"
+#include "dg_msgs/srv/set_joint_current_gain_p_base.hpp"
+#include "dg_msgs/srv/set_joint_current_gain_i.hpp"
+#include "dg_msgs/srv/set_joint_current_gain_i_finger.hpp"
+#include "dg_msgs/srv/set_joint_current_gain_i_all.hpp"
+#include "dg_msgs/srv/set_joint_current_gain_i_base.hpp"
 #include "dg_msgs/srv/set_joint_encoder_zero.hpp"
 
 // Recipe Services
